@@ -43,7 +43,6 @@ def exp3G(n_steps, arms, E, U, eta, gamma):
         rew = np.zeros(K)
         for k in range(K):
             side_rew = arms[k].sample()
-
             if k == action:
                 reward[t] += side_rew
 
