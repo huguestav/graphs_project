@@ -4,9 +4,9 @@ import bandits
 from exp3G import exp3G
 from ucbmaxn import ucb_max_n
 
-arm_0 = bandits.bernoulliArm(0.2)
-arm_1 = bandits.bernoulliArm(0.6)
-arm_2 = bandits.bernoulliArm(0.4)
+# arm_0 = bandits.bernoulliArm(0.2)
+# arm_1 = bandits.bernoulliArm(0.6)
+# arm_2 = bandits.bernoulliArm(0.4)
 
 #arm_0 = bandits.gaussianArm(0.5, 1)
 #arm_1 = bandits.gaussianArm(0, 0.6)
@@ -16,9 +16,9 @@ arm_2 = bandits.bernoulliArm(0.4)
 #arm_1 = bandits.expArm(1.6)
 #arm_2 = bandits.expArm(1.4)
 
-# arm_0 = bandits.betaArm(0.5, 0.5)
-# arm_1 = bandits.betaArm(5,1)
-# arm_2 = bandits.betaArm(1,3)
+arm_0 = bandits.betaArm(0.5, 0.5)
+arm_1 = bandits.betaArm(5,1)
+arm_2 = bandits.betaArm(1,3)
 
 arms = [arm_0, arm_1, arm_2]
 n_steps = 3000
@@ -31,8 +31,8 @@ means = [arm_0.mean, arm_1.mean, arm_2.mean]
 n_steps = 300
 
 #E = np.array([[0, 1, 0],[1,0,1],[1,1,0]]) #weakly observable
-#E = np.array([[1, 0, 0],[0,1,0],[0,0,1]]) #strongly observable
-E = np.array([[0,1,0],[0,1,1],[0,1,1]]) #not observable
+E = np.array([[1, 0, 0],[0,1,0],[0,0,1]]) #strongly observable
+# E = np.array([[0,1,0],[0,1,1],[0,1,1]]) #not observable
 
 #E = np.array([[1, 0, 0],[0,0,1],[0,0,1]])
 
