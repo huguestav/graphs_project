@@ -12,7 +12,7 @@ def ucb_max_n(n_steps, arms, E):
     # and O : number of draws per arm
     X = np.zeros(K)
     O = np.zeros(K)
-    
+
     # First draw each arm once
     for k in range(K):
         for i in np.where(E[k,:] != 0)[0]:
@@ -146,14 +146,11 @@ def general_ucbn_2(n_steps, arms, E):
 
     # Initialize X : total rewards per arm
     # O : number of observations per arm
-    # D : number of draws per arm
     X = np.zeros(K)
     O = np.zeros(K)
-    D = np.zeros(K)
 
     # First draw each arm once
     for k in range(K):
-        D[k] += 1
         neighbors_k = np.where(E[k,:])[0]
         for i in neighbors_k:
             O[i] += 1
@@ -168,19 +165,9 @@ def general_ucbn_2(n_steps, arms, E):
 
     # Do n_steps iterations of the alorithm
     for t in range(n_steps - K):
-        # A = np.matlib.repmat(O,K,1) * (2 - E)
-        # D_arg = np.argmin(A, axis=1)
-        # D_val = np.min(A, axis=1)
-
         D_val = np.zeros(K)
         for k in range(K):
             D_val[k] = np.min(O[np.where(E[k,:])[0]])
-
-        # print "A:", A
-        # print "repmat:", np.matlib.repmat(O,K,1)
-        # print "O:", O
-        # print "D:", D_val
-        # print ""
 
         Y = X / O + np.sqrt(2.*np.log(t+K) / D_val)
         i = np.argmax(Y)
@@ -210,14 +197,11 @@ def general_ucbn_3(n_steps, arms, E):
 
     # Initialize X : total rewards per arm
     # O : number of observations per arm
-    # D : number of draws per arm
     X = np.zeros(K)
     O = np.zeros(K)
-    D = np.zeros(K)
 
     # First draw each arm once
     for k in range(K):
-        D[k] += 1
         neighbors_k = np.where(E[k,:])[0]
         for i in neighbors_k:
             O[i] += 1
@@ -232,27 +216,20 @@ def general_ucbn_3(n_steps, arms, E):
 
     # Do n_steps iterations of the alorithm
     for t in range(n_steps - K):
-        # A = np.matlib.repmat(O,K,1) * (2 - E)
-        # D_arg = np.argmin(A, axis=1)
-        # D_val = np.min(A, axis=1)
-
         D_arg = np.zeros(K, dtype=np.int)
         for k in range(K):
-            D_arg[k] = np.argmin(O[np.where(E[k,:])[0]])
+            non_zero_idx = np.where(E[k,:])[0]
+            min_non_zero_idx = np.argmin(O[non_zero_idx])
+            D_arg[k] = non_zero_idx[min_non_zero_idx]
         D_val = O[D_arg]
 
-        # print "A:", A
-        # print "repmat:", np.matlib.repmat(O,K,1)
-        # print "O:", O
-        # print "D:", D_val
-        # print ""
 
         Y = X / O + np.sqrt(2.*np.log(t+K) / D_val)
         i = np.argmax(Y)
 
         # Neighbor of i with smallest number of observations (i -> k)
         k = D_arg[i]
-        neighbors_k = np.where(E[k,:] != 0)[0]
+        neighbors_k = np.where(E[:,k] != 0)[0]
 
         # Consider as a candidate : j which is the neighbor of k
         # with the highest expected value.
