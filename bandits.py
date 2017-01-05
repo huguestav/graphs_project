@@ -11,6 +11,14 @@ class bernoulliArm():
     def sample(self):
         return int(random.random() < self.p)
 
+#class gaussianArm():
+#    def __init__(self, mu, sigma):
+#        self.mean = mu
+#        self.var = sigma
+#
+#    def sample(self):
+#        R = random.gauss(self.mean, self.var)
+#        return R*(R>0)*(R<1) + 1.0*(R>1)
 
 class expArm():
     def __init__(self, lambdap):

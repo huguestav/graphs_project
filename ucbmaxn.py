@@ -12,7 +12,7 @@ def ucb_max_n(n_steps, arms, E):
     # and O : number of draws per arm
     X = np.zeros(K)
     O = np.zeros(K)
-
+    
     # First draw each arm once
     for k in range(K):
         for i in np.where(E[k,:] != 0)[0]:
