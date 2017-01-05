@@ -45,6 +45,7 @@ def ts_max(n_steps, arms, E):
     # and O : number of draws per arm
     X = np.zeros(K)
     O = np.zeros(K)
+    D = np.zeros(K)
 
     # Do n_steps iterations of the algorithm
     for t in range(n_steps):
@@ -53,22 +54,26 @@ def ts_max(n_steps, arms, E):
         # Choose the arm that maximizes theta
         i = np.argmax(theta)
 
-        # Select j, the best neighbor of i
+        # Consider j, the best neighbor of i
+        Y = X/O
         neighbors_i = np.where(E[:,i] != 0)[0]
-        j = neighbors_i[np.argmax((X/O)[neighbors_i])]
+        j = neighbors_i[np.argmax(Y[neighbors_i])]
+        if Y[j] > Y[i]:
+            i = j
 
         # Draw arm j and observe the rewards of the neighbors
-        neighbors_j = np.where(E[j,:] != 0)[0]
-        for k in neighbors_j:
+        neighbors_i = np.where(E[i,:] != 0)[0]
+        D[i] += 1
+        for k in neighbors_i:
             O[k] += 1
             rew = arms[k].sample()
             X[k] += rew
-            if k == j:
+            if k == i:
                 reward[t] = rew
 
         # Handle the case when there are 0 on the diagonal
-        if j not in neighbors_j:
-            reward[t] = arms[j].sample()
+        if i not in neighbors_i:
+            reward[t] = arms[i].sample()
 
     return reward
 
